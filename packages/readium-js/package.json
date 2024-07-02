@@ -1,0 +1,26 @@
+{
+  "name": "@baicie/readium-js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "scripts": {
+    "build": "rollup --bundleConfigAsCjs -c"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^3.6.0",
+    "npm-run-all": "^4.1.3",
+    "opener": "^1.4.3",
+    "http-server": "github:readium/http-server#9c6e56279af34381a5dae640b7d73762e8135bd7",
+    "bowser": "^1.9.3"
+  },
+  "devDependencies": {
+    "crypto-js": "^3.1.9-1",
+    "zip-js": "github:readium/zip.js#a6f4b24f16dfb5d62d9de48371922bb074ec6c8a",
+    "requirejs-text": "^2.0.15",
+    "gift": "^0.10.1"
+  }
+}
