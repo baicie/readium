@@ -2,8 +2,20 @@
   "name": "@baicie/readium-shared-js",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
-  "module": "dist/index.es.js",
+  "exports": {
+    "./globals": {
+      "import": "./dist/es/globals.js",
+      "require": "./dist/cjs/globals.js"
+    },
+    "./views/reader_view": {
+      "import": "./dist/es/views/reader_view.js",
+      "require": "./dist/cjs/views/reader_view.js"
+    },
+    "./views/iframe_loader": {
+      "import": "./dist/es/views/iframe_loader.js",
+      "require": "./dist/cjs/views/iframe_loader.js"
+    }
+  },
   "scripts": {
     "build": "rollup --bundleConfigAsCjs -c"
   },
@@ -11,7 +23,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@baicie/readium-cfi-js": "workspace:^"
+    "@baicie/readium-cfi-js": "workspace:^",
+    "jquery": "^3.7.1",
+    "eventemitter3": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",
