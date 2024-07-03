@@ -5,7 +5,8 @@
   "main": "dist/readium-cfi.js",
   "module": "dist/readium-cfi.es.js",
   "scripts": {
-    "build": "rollup --bundleConfigAsCjs -c"
+    "build": "rollup --bundleConfigAsCjs -c",
+    "dev": "rollup --bundleConfigAsCjs -c -w"
   },
   "keywords": [],
   "author": "",

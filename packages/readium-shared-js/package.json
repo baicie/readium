@@ -17,25 +17,24 @@
     }
   },
   "scripts": {
-    "build": "rollup --bundleConfigAsCjs -c"
+    "build": "rollup --bundleConfigAsCjs -c",
+    "dev": "rollup --bundleConfigAsCjs -c -w"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@baicie/readium-cfi-js": "workspace:^",
-    "jquery": "^3.7.1",
-    "eventemitter3": "^5.0.1"
+    "URIjs": "^1.16.1",
+    "console-shim": "0.0.1-security",
+    "es6-shim": "^0.35.8",
+    "eventemitter3": "^5.0.1",
+    "jquery": "^3.7.1"
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",
     "@babel/plugin-external-helpers": "^7.24.7",
     "@babel/preset-env": "^7.24.7",
-    "@rollup/plugin-babel": "^6.0.4",
-    "@rollup/plugin-commonjs": "^26.0.1",
-    "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-terser": "^0.4.4",
     "almond": "^0.3.3",
     "amdclean": "2.7.0",
     "backbone": "^1.6.0",
@@ -45,8 +44,6 @@
     "cson": "^8.4.0",
     "css-element-queries": "^1.2.3",
     "cssom": "^0.5.0",
-    "es6-shim": "^0.35.8",
-    "eventemitter3": "^5.0.1",
     "glob": "^10.4.2",
     "http-server": "^14.1.1",
     "jquery": "^3.7.1",
@@ -59,10 +56,8 @@
     "opener": "^1.5.2",
     "requirejs": "^2.3.6",
     "rimraf": "^5.0.7",
-    "rollup": "^4.18.0",
     "sorcery": "^1.0.0",
     "underscore": "^1.13.6",
-    "urijs": "^1.19.11",
     "watch": "^1.0.2",
     "yuidocjs": "^0.10.2"
   }

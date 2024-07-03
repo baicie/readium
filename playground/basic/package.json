@@ -9,7 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@baicie/readium-js": "workspace:^"
+    "@baicie/readium-js": "workspace:^",
+    "eventemitter3": "^5.0.1"
   },
   "devDependencies": {
     "typescript": "^5.5.3",

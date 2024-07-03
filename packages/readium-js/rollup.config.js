@@ -19,7 +19,7 @@ const plugins = [
     }),
     resolve(),
     commonjs({
-        include: "node_modules/**",
+        esmExternals: true,
     }),
     json(),
     // terser(),
@@ -31,23 +31,19 @@ const standardConfig = defineConfig({
         {
             file: pkg.module,
             format: "es",
-            // sourcemap: true,
+            sourcemap: true,
         },
-    ],
-    plugins,
-});
-
-const compatibilityConfig = defineConfig({
-    input: "src/index.js",
-    output: [
         {
             file: pkg.main,
-            format: "umd",
-            name: "EPUBcfi",
-            // sourcemap: true,
+            format: "cjs",
+            sourcemap: true,
         },
     ],
     plugins,
+    external: [
+        ...Object.keys(pkg.dependencies || {}),
+        ...Object.keys(pkg.peerDependencies || {}),
+    ],
 });
 
-export default [standardConfig, compatibilityConfig];
+export default [standardConfig];
