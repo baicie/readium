@@ -6,22 +6,25 @@ import terser from "@rollup/plugin-terser";
 import { defineConfig } from "rollup";
 import replace from "@rollup/plugin-replace";
 const pkg = require("./package.json");
+import del from "rollup-plugin-delete";
 
 const plugins = [
+    del({ targets: ["dist/*"] }),
     replace({
         preventAssignment: true,
-        __buildVersion__: JSON.stringify(pkg.version),
+        __buildVersion__: JSON.stringify(pkg.version)
     }),
     babel({
         babelHelpers: "bundled",
         exclude: "node_modules/**",
         presets: ["@babel/preset-env"],
+        plugins: ["transform-amd-to-commonjs"]
     }),
     resolve(),
     commonjs({
-        esmExternals: true,
+        esmExternals: true
     }),
-    json(),
+    json()
     // terser(),
 ];
 
@@ -31,19 +34,19 @@ const standardConfig = defineConfig({
         {
             file: pkg.module,
             format: "es",
-            sourcemap: true,
+            sourcemap: true
         },
         {
             file: pkg.main,
             format: "cjs",
-            sourcemap: true,
-        },
+            sourcemap: true
+        }
     ],
     plugins,
     external: [
         ...Object.keys(pkg.dependencies || {}),
-        ...Object.keys(pkg.peerDependencies || {}),
-    ],
+        ...Object.keys(pkg.peerDependencies || {})
+    ]
 });
 
 export default [standardConfig];

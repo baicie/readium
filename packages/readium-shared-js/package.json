@@ -25,11 +25,11 @@
   "license": "ISC",
   "dependencies": {
     "@baicie/readium-cfi-js": "workspace:^",
-    "URIjs": "^1.16.1",
     "console-shim": "0.0.1-security",
     "es6-shim": "^0.35.8",
     "eventemitter3": "^5.0.1",
-    "jquery": "^3.7.1"
+    "jquery": "^3.7.1",
+    "urijs": "^1.19.11"
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",
