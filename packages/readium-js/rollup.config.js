@@ -16,13 +16,13 @@ const plugins = [
     }),
     babel({
         babelHelpers: "bundled",
-        exclude: "node_modules/**",
         presets: ["@babel/preset-env"],
-        plugins: ["transform-amd-to-commonjs"]
+        plugins: ["transform-amd-to-commonjs"],
+        include: ["node_modules/urijs", "src/**"]
     }),
     resolve(),
     commonjs({
-        esmExternals: true
+        include: "node_modules/**"
     }),
     json()
     // terser(),

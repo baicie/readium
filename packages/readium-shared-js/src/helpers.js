@@ -2,11 +2,10 @@ define([
     "./globals",
     "underscore",
     "jquery",
-    "jquerySizes",
     "./models/spine_item",
-    "URIjs",
-], function (Globals, _, $, JQuerySizes, SpineItem, URI) {
-    (function () {
+    "urijs"
+], function(Globals, _, $, SpineItem, URI) {
+    (function() {
         /* jshint strict: true */
         /* jshint -W034 */
         "use strict";
@@ -29,13 +28,13 @@ define([
         }
 
         if (Date.now) {
-            window.performance.now = function () {
+            window.performance.now = function() {
                 return Date.now();
             };
             return;
         }
 
-        window.performance.now = function () {
+        window.performance.now = function() {
             return +new Date();
         };
     })();
@@ -47,7 +46,7 @@ define([
      * @param ebookURL URL string, or Blob (possibly File)
      * @returns string representing the file path / name from which the asset referenced by this URL originates
      */
-    Helpers.getEbookUrlFilePath = function (ebookURL) {
+    Helpers.getEbookUrlFilePath = function(ebookURL) {
         if (!window.Blob || !window.File) return ebookURL;
 
         if (ebookURL instanceof File) {
@@ -63,7 +62,7 @@ define([
      * @param initialQuery: (optional) initial query string
      * @returns object (map between URL query parameter names and corresponding decoded / unescaped values)
      */
-    Helpers.getURLQueryParams = function (initialQuery) {
+    Helpers.getURLQueryParams = function(initialQuery) {
         var params = {};
 
         var query = initialQuery || window.location.search;
@@ -86,14 +85,17 @@ define([
      * @param queryStringOverrides: object that maps query parameter names with values (to be included in the resulting URL, while any other query params in the current window.location are preserved as-is)
      * @returns string corresponding to a URL obtained by concatenating the given URL with the given query parameters
      */
-    Helpers.buildUrlQueryParameters = function (
+    Helpers.buildUrlQueryParameters = function(
         initialUrl,
         queryStringOverrides
     ) {
         var uriInstance = new URI(initialUrl || window.location);
         var startingQueryString = uriInstance.search();
         var urlFragment = uriInstance.hash();
-        var urlPath = uriInstance.search("").hash("").toString();
+        var urlPath = uriInstance
+            .search("")
+            .hash("")
+            .toString();
 
         var newQueryString = "";
 
@@ -159,21 +161,21 @@ define([
      * @param height
      * @constructor
      */
-    Helpers.Rect = function (left, top, width, height) {
+    Helpers.Rect = function(left, top, width, height) {
         this.left = left;
         this.top = top;
         this.width = width;
         this.height = height;
 
-        this.right = function () {
+        this.right = function() {
             return this.left + this.width;
         };
 
-        this.bottom = function () {
+        this.bottom = function() {
             return this.top + this.height;
         };
 
-        this.isOverlap = function (rect, tolerance) {
+        this.isOverlap = function(rect, tolerance) {
             if (tolerance == undefined) {
                 tolerance = 0;
             }
@@ -195,7 +197,7 @@ define([
     //This method treats multicolumn view as one long column and finds the rectangle of the element in this "long" column
     //we are not using jQuery Offset() and width()/height() function because for multicolumn rendition_layout it produces rectangle as a bounding box of element that
     // reflows between columns this is inconstant and difficult to analyze .
-    Helpers.Rect.fromElement = function ($element) {
+    Helpers.Rect.fromElement = function($element) {
         var e;
         if (_.isArray($element) || $element instanceof jQuery) e = $element[0];
         else e = $element;
@@ -229,7 +231,7 @@ define([
      * @param callback: function invoked when "done", which means that if there are asynchronous operations such as font-face loading via injected stylesheets, then the UpdateHtmlFontAttributes() function returns immediately but the caller should wait for the callback function call if fully-loaded font-face *stylesheets* are required on the caller's side (note that the caller's side may still need to detect *actual font loading*, via the FontLoader API or some sort of ResizeSensor to indicate that the updated font-family has been used to render the document).
      */
 
-    Helpers.UpdateHtmlFontAttributes = function (
+    Helpers.UpdateHtmlFontAttributes = function(
         $epubHtml,
         fontSize,
         fontObj,
@@ -245,7 +247,7 @@ define([
             REMOVE = 2; //Types for css font family.
         var changeFontFamily = NOTHING;
 
-        var fontLoadCallback = function () {
+        var fontLoadCallback = function() {
             var perf = false;
 
             // TODO: very slow on Firefox!
@@ -260,8 +262,9 @@ define([
                     docHead[0].removeChild(fontFamilyStyle[0]);
                 }
                 if (changeFontFamily == ADD) {
-                    var style =
-                        $epubHtml[0].ownerDocument.createElement("style");
+                    var style = $epubHtml[0].ownerDocument.createElement(
+                        "style"
+                    );
                     style.setAttribute("id", "readium-fontFamily");
                     style.appendChild(
                         $epubHtml[0].ownerDocument.createTextNode(
@@ -412,17 +415,17 @@ define([
             if (!link.length) {
                 changeFontFamily = ADD;
 
-                setTimeout(function () {
+                setTimeout(function() {
                     link = $("<link/>", {
                         id: FONT_FAMILY_ID,
                         "data-fontfamily": fontObj.fontFamily,
                         rel: "stylesheet",
-                        type: "text/css",
+                        type: "text/css"
                     });
                     docHead.append(link);
 
                     link.attr({
-                        href: fontObj.url,
+                        href: fontObj.url
                     });
                 }, 0);
             } else if (dataFontFamily != fontObj.fontFamily) {
@@ -430,7 +433,7 @@ define([
 
                 link.attr({
                     "data-fontfamily": fontObj.fontFamily,
-                    href: fontObj.url,
+                    href: fontObj.url
                 });
             } else {
                 changeFontFamily = NOTHING;
@@ -442,7 +445,7 @@ define([
 
         if (changeFontFamily == ADD) {
             // just in case the link@onload does not trigger, we set a timeout
-            setTimeout(function () {
+            setTimeout(function() {
                 fontLoadCallback_();
             }, 100);
         } else {
@@ -458,7 +461,7 @@ define([
      * @returns {string}
      * @constructor
      */
-    Helpers.ResolveContentRef = function (contentRef, sourceFileHref) {
+    Helpers.ResolveContentRef = function(contentRef, sourceFileHref) {
         if (!sourceFileHref) {
             return contentRef;
         }
@@ -485,7 +488,7 @@ define([
      * @returns {boolean}
      * @static
      */
-    Helpers.EndsWith = function (str, suffix) {
+    Helpers.EndsWith = function(str, suffix) {
         return str.indexOf(suffix, str.length - suffix.length) !== -1;
     };
 
@@ -496,7 +499,7 @@ define([
      * @returns {boolean}
      * @static
      */
-    Helpers.BeginsWith = function (str, suffix) {
+    Helpers.BeginsWith = function(str, suffix) {
         return str.indexOf(suffix) === 0;
     };
 
@@ -507,7 +510,7 @@ define([
      * @returns {string}
      * @static
      */
-    Helpers.RemoveFromString = function (str, toRemove) {
+    Helpers.RemoveFromString = function(str, toRemove) {
         var startIx = str.indexOf(toRemove);
 
         if (startIx == -1) {
@@ -526,7 +529,7 @@ define([
      * @param padding
      * @constructor
      */
-    Helpers.Margins = function (margin, border, padding) {
+    Helpers.Margins = function(margin, border, padding) {
         this.margin = margin;
         this.border = border;
         this.padding = padding;
@@ -537,11 +540,11 @@ define([
         this.bottom =
             this.margin.bottom + this.border.bottom + this.padding.bottom;
 
-        this.width = function () {
+        this.width = function() {
             return this.left + this.right;
         };
 
-        this.height = function () {
+        this.height = function() {
             return this.top + this.bottom;
         };
     };
@@ -550,7 +553,7 @@ define([
      *
      * @param $iframe
      */
-    Helpers.triggerLayout = function ($iframe) {
+    Helpers.triggerLayout = function($iframe) {
         var doc = $iframe[0].contentDocument;
 
         if (!doc) {
@@ -619,7 +622,7 @@ define([
     // Returns falsy and truthy
     // true and false mean that the synthetic-spread or single-page is "forced" (to be respected whatever the external conditions)
     // 1 and 0 mean that the synthetic-spread or single-page is "not forced" (is allowed to be overriden by external conditions, such as optimum column width / text line number of characters, etc.)
-    Helpers.deduceSyntheticSpread = function ($viewport, spineItem, settings) {
+    Helpers.deduceSyntheticSpread = function($viewport, spineItem, settings) {
         if (!$viewport || $viewport.length == 0) {
             return 0; // non-forced
         }
@@ -686,7 +689,7 @@ define([
      * @param $element
      * @returns {Helpers.Rect}
      */
-    Helpers.Margins.fromElement = function ($element) {
+    Helpers.Margins.fromElement = function($element) {
         return new this(
             $element.margin(),
             $element.border(),
@@ -697,7 +700,7 @@ define([
     /**
      * @returns {Helpers.Rect}
      */
-    Helpers.Margins.empty = function () {
+    Helpers.Margins.empty = function() {
         return new this(
             { left: 0, right: 0, top: 0, bottom: 0 },
             { left: 0, right: 0, top: 0, bottom: 0 },
@@ -705,7 +708,7 @@ define([
                 left: 0,
                 right: 0,
                 top: 0,
-                bottom: 0,
+                bottom: 0
             }
         );
     };
@@ -716,7 +719,7 @@ define([
      * @param params
      * @returns {Helpers.loadTemplate.cache}
      */
-    Helpers.loadTemplate = function (name, params) {
+    Helpers.loadTemplate = function(name, params) {
         return Helpers.loadTemplate.cache[name];
     };
 
@@ -736,7 +739,7 @@ define([
         reflowable_book_frame:
             '<div id="reflowable-book-frame" class="clearfix book-frame reflowable-book-frame"></div>',
         reflowable_book_page_frame:
-            '<div id="reflowable-content-frame" class="reflowable-content-frame"><iframe enable-annotation="enable-annotation" allowfullscreen="allowfullscreen" scrolling="no" id="epubContentIframe"></iframe></div>',
+            '<div id="reflowable-content-frame" class="reflowable-content-frame"><iframe enable-annotation="enable-annotation" allowfullscreen="allowfullscreen" scrolling="no" id="epubContentIframe"></iframe></div>'
         /***
          * The `enable-annotation` attribute on an iframe helps detect the content frames for annotating tools such as Hypothesis
          * See here for more details:
@@ -750,7 +753,7 @@ define([
      * @param styles
      * @param $element
      */
-    Helpers.setStyles = function (styles, $element) {
+    Helpers.setStyles = function(styles, $element) {
         var count = styles.length;
 
         if (!count) {
@@ -776,7 +779,7 @@ define([
                     for (var prop in style.declarations) {
                         if (style.declarations.hasOwnProperty(prop)) {
                             // backgroundColor => background-color
-                            var prop_ = prop.replace(/[A-Z]/g, function (a) {
+                            var prop_ = prop.replace(/[A-Z]/g, function(a) {
                                 return "-" + a.toLowerCase();
                             });
 
@@ -795,7 +798,7 @@ define([
                     for (var prop in style.declarations) {
                         if (style.declarations.hasOwnProperty(prop)) {
                             // backgroundColor => background-color
-                            var prop_ = prop.replace(/[A-Z]/g, function (a) {
+                            var prop_ = prop.replace(/[A-Z]/g, function(a) {
                                 return "-" + a.toLowerCase();
                             });
                             cssProperties +=
@@ -808,7 +811,7 @@ define([
 
                     stylings.push({
                         selector: style.selector,
-                        cssProps: cssProperties,
+                        cssProps: cssProperties
                     });
                 }
             } else {
@@ -872,7 +875,7 @@ define([
      * @param iframe
      * @returns {boolean}
      */
-    Helpers.isIframeAlive = function (iframe) {
+    Helpers.isIframeAlive = function(iframe) {
         var w = undefined;
         var d = undefined;
         try {
@@ -891,7 +894,7 @@ define([
      * @param $viewport
      * @returns {Globals.Views.ORIENTATION_LANDSCAPE|Globals.Views.ORIENTATION_PORTRAIT}
      */
-    Helpers.getOrientation = function ($viewport) {
+    Helpers.getOrientation = function($viewport) {
         var viewportWidth = $viewport.width();
         var viewportHeight = $viewport.height();
 
@@ -910,7 +913,7 @@ define([
      * @param orientation
      * @returns {boolean}
      */
-    Helpers.isRenditionSpreadPermittedForItem = function (item, orientation) {
+    Helpers.isRenditionSpreadPermittedForItem = function(item, orientation) {
         var rendition_spread = item.getRenditionSpread();
 
         return (
@@ -924,20 +927,20 @@ define([
         );
     };
 
-    Helpers.CSSTransition = function ($el, trans) {
+    Helpers.CSSTransition = function($el, trans) {
         // does not work!
         //$el.css('transition', trans);
 
         var css = {};
         // empty '' prefix FIRST!
-        _.each(["", "-webkit-", "-moz-", "-ms-"], function (prefix) {
+        _.each(["", "-webkit-", "-moz-", "-ms-"], function(prefix) {
             css[prefix + "transition"] = prefix + trans;
         });
         $el.css(css);
     };
 
     //scale, left, top, angle, origin
-    Helpers.CSSTransformString = function (options) {
+    Helpers.CSSTransformString = function(options) {
         var enable3D = options.enable3D ? true : false;
 
         var translate,
@@ -985,7 +988,7 @@ define([
         return css;
     };
 
-    Helpers.extendedThrottle = function (
+    Helpers.extendedThrottle = function(
         startCb,
         tickCb,
         endCb,
@@ -1000,7 +1003,7 @@ define([
             last,
             deferTimer;
 
-        return function () {
+        return function() {
             var ctx = context || this,
                 now = (Date.now && Date.now()) || new Date().getTime(),
                 args = arguments;
@@ -1016,7 +1019,7 @@ define([
             }
 
             clearTimeout(deferTimer);
-            deferTimer = setTimeout(function () {
+            deferTimer = setTimeout(function() {
                 last = now;
                 first = true;
                 endCb.apply(ctx, args);
@@ -1032,7 +1035,7 @@ define([
      * @param sel
      * @returns {string}
      */
-    Helpers.escapeJQuerySelector = function (sel) {
+    Helpers.escapeJQuerySelector = function(sel) {
         //http://api.jquery.com/category/selectors/
         //!"#$%&'()*+,./:;<=>?@[\]^`{|}~
         // double backslash escape
@@ -1058,7 +1061,7 @@ define([
         return selector;
     };
 
-    Helpers.polyfillCaretRangeFromPoint = function (document) {
+    Helpers.polyfillCaretRangeFromPoint = function(document) {
         //Derived from css-regions-polyfill:
         // https://github.com/FremyCompany/css-regions-polyfill/blob/bfbb6445ec2a2a883005ab8801d8463fa54b5701/src/range-extensions.js
         //Copyright (c) 2013 François REMY
@@ -1091,8 +1094,8 @@ define([
                 //Copyright (c) 2009 Tim Cameron Ryan
                 //Released under the MIT/X License
                 var TextRangeUtils = {
-                    convertToDOMRange: function (textRange, document) {
-                        var adoptBoundary = function (
+                    convertToDOMRange: function(textRange, document) {
+                        var adoptBoundary = function(
                             domRange,
                             textRangeInner,
                             bStart
@@ -1145,7 +1148,7 @@ define([
                         adoptBoundary(domRange, textRange, true);
                         adoptBoundary(domRange, textRange, false);
                         return domRange;
-                    },
+                    }
                 };
 
                 document.caretRangeFromPoint = function caretRangeFromPoint(

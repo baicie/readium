@@ -1,4 +1,4 @@
-define(["jquery", "underscore", "eventEmitter"], function ($, _, EventEmitter) {
+define(["jquery", "underscore", "eventemitter3"], function($, _, EventEmitter) {
     var _registeredPlugins = {};
 
     /**
@@ -7,10 +7,10 @@ define(["jquery", "underscore", "eventEmitter"], function ($, _, EventEmitter) {
      *
      * @constructor
      */
-    var PluginsController = function () {
+    var PluginsController = function() {
         var self = this;
 
-        this.initialize = function (reader) {
+        this.initialize = function(reader) {
             var apiFactory = new PluginApiFactory(reader);
 
             if (!reader.plugins) {
@@ -20,17 +20,17 @@ define(["jquery", "underscore", "eventEmitter"], function ($, _, EventEmitter) {
             } else {
                 throw new Error("Already initialized on reader!");
             }
-            _.each(_registeredPlugins, function (plugin) {
+            _.each(_registeredPlugins, function(plugin) {
                 plugin.init(apiFactory);
             });
         };
 
-        this.getLoadedPlugins = function () {
+        this.getLoadedPlugins = function() {
             return _registeredPlugins;
         };
 
         // Creates a new instance of the given plugin constructor.
-        this.register = function (name, optDependencies, initFunc) {
+        this.register = function(name, optDependencies, initFunc) {
             if (_registeredPlugins[name]) {
                 throw new Error(
                     "Duplicate registration for plugin with name: " + name
@@ -44,7 +44,7 @@ define(["jquery", "underscore", "eventEmitter"], function ($, _, EventEmitter) {
                 dependencies = optDependencies;
             }
 
-            _registeredPlugins[name] = new Plugin(name, dependencies, function (
+            _registeredPlugins[name] = new Plugin(name, dependencies, function(
                 plugin,
                 api
             ) {
@@ -72,10 +72,10 @@ define(["jquery", "underscore", "eventEmitter"], function ($, _, EventEmitter) {
     }
 
     function PluginApiFactory(reader) {
-        this.create = function (plugin) {
+        this.create = function(plugin) {
             return {
                 host: reader,
-                instance: new PluginApi(reader, plugin),
+                instance: new PluginApi(reader, plugin)
             };
         };
     }
@@ -113,7 +113,7 @@ define(["jquery", "underscore", "eventEmitter"], function ($, _, EventEmitter) {
     }
 
     Plugin.prototype = {
-        init: function (apiFactory) {
+        init: function(apiFactory) {
             var requiredPluginNames = this.dependencies || [];
             for (
                 var i = 0,
@@ -145,7 +145,7 @@ define(["jquery", "underscore", "eventEmitter"], function ($, _, EventEmitter) {
             this.initializer(this, apiFactory.create(this));
         },
 
-        fail: function (reason) {
+        fail: function(reason) {
             this.initialized = true;
             this.supported = false;
             throw new Error(
@@ -153,11 +153,11 @@ define(["jquery", "underscore", "eventEmitter"], function ($, _, EventEmitter) {
             );
         },
 
-        warn: function (msg) {
+        warn: function(msg) {
             console.warn("Plugin " + this.name + ": " + msg);
         },
 
-        deprecationNotice: function (deprecated, replacement) {
+        deprecationNotice: function(deprecated, replacement) {
             console.warn(
                 "DEPRECATED: " +
                     deprecated +
@@ -169,9 +169,9 @@ define(["jquery", "underscore", "eventEmitter"], function ($, _, EventEmitter) {
             );
         },
 
-        createError: function (msg) {
+        createError: function(msg) {
             return new Error("Error in " + this.name + " Plugin: " + msg);
-        },
+        }
     };
 
     var instance = new PluginsController();

@@ -54,24 +54,6 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
     devDependencies:
-      '@babel/core':
-        specifier: ^7.24.7
-        version: 7.24.7
-      '@babel/plugin-external-helpers':
-        specifier: ^7.24.7
-        version: 7.24.7(@babel/core@7.24.7)
-      '@babel/preset-env':
-        specifier: ^7.24.7
-        version: 7.24.7(@babel/core@7.24.7)
-      '@rollup/plugin-babel':
-        specifier: ^6.0.4
-        version: 6.0.4(@babel/core@7.24.7)(rollup@4.18.0)
-      '@rollup/plugin-commonjs':
-        specifier: ^26.0.1
-        version: 26.0.1(rollup@4.18.0)
-      '@rollup/plugin-node-resolve':
-        specifier: ^15.2.3
-        version: 15.2.3(rollup@4.18.0)
       jasmine-core:
         specifier: ^5.1.2
         version: 5.1.2
@@ -93,15 +75,15 @@ importers:
       rimraf:
         specifier: ^5.0.7
         version: 5.0.7
-      rollup:
-        specifier: ^4.18.0
-        version: 4.18.0
       yuidocjs:
         specifier: ^0.10.2
         version: 0.10.2
 
   packages/readium-js:
     dependencies:
+      '@baicie/readium-cfi-js':
+        specifier: workspace:^
+        version: link:../readium-cfi-js
       '@baicie/readium-shared-js':
         specifier: workspace:^
         version: link:../readium-shared-js
@@ -126,6 +108,9 @@ importers:
       underscore:
         specifier: ^1.13.6
         version: 1.13.6
+      urijs:
+        specifier: ^1.19.11
+        version: 1.19.11
     devDependencies:
       crypto-js:
         specifier: ^4.2.0
@@ -157,6 +142,9 @@ importers:
       jquery:
         specifier: ^3.7.1
         version: 3.7.1
+      resize-sensor:
+        specifier: ^0.0.6
+        version: 0.0.6
       urijs:
         specifier: ^1.19.11
         version: 1.19.11
@@ -2767,6 +2755,9 @@ packages:
 
   requires-port@1.0.0:
     resolution: {integrity: sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==}
+
+  resize-sensor@0.0.6:
+    resolution: {integrity: sha512-e+3wwdki9elemYP6AnyG2BK9/Gd7ak46wZN+Z62WwmWfhn2La1XV2rPRRIcar+PhRhfiQDXi29TapGMTIbI3Pg==}
 
   resolve@1.22.8:
     resolution: {integrity: sha512-oKWePCxqpd6FlLvGV1VU0x7bkPmmCNolxzjMf4NczoDnQcIWrAF+cPtZn5i6n+RfD2d9i0tzpKnG6Yk168yIyw==}
@@ -6088,6 +6079,8 @@ snapshots:
   requirejs@2.3.6: {}
 
   requires-port@1.0.0: {}
+
+  resize-sensor@0.0.6: {}
 
   resolve@1.22.8:
     dependencies:

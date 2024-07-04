@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@baicie/readium-cfi-js": "workspace:^",
     "@baicie/readium-shared-js": "workspace:^",
     "bowser": "^2.11.0",
     "concurrently": "^8.2.2",
@@ -19,7 +20,8 @@
     "jquery": "^3.7.1",
     "npm-run-all": "^4.1.5",
     "opener": "^1.5.2",
-    "underscore": "^1.13.6"
+    "underscore": "^1.13.6",
+    "urijs": "^1.19.11"
   },
   "devDependencies": {
     "crypto-js": "^4.2.0",

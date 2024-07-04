@@ -19,7 +19,7 @@ const plugins = [
     resolve(),
     json(),
     commonjs({
-        esmExternals: true
+        // include: "node_modules/**"
     })
     // terser(),
 ];

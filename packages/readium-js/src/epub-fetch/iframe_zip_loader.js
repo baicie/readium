@@ -1,11 +1,11 @@
 define([
-    "URIjs",
-    "readium_shared_js/views/iframe_loader",
+    "urijs",
+    "@baicie/readium-shared-js/views/iframe_loader",
     "underscore",
     "./discover_content_type",
-    "bowser",
-], function (URI, IFrameLoader, _, ContentTypeDiscovery, bowser) {
-    var zipIframeLoader = function (
+    "bowser"
+], function(URI, IFrameLoader, _, ContentTypeDiscovery, bowser) {
+    var zipIframeLoader = function(
         getCurrentResourceFetcher,
         contentDocumentTextPreprocessor
     ) {
@@ -19,7 +19,7 @@ define([
 
         var _contentDocumentTextPreprocessor = contentDocumentTextPreprocessor;
 
-        this.addIFrameEventListener = function (eventName, callback, context) {
+        this.addIFrameEventListener = function(eventName, callback, context) {
             basicIframeLoader.addIFrameEventListener(
                 eventName,
                 callback,
@@ -27,11 +27,11 @@ define([
             );
         };
 
-        this.updateIframeEvents = function (iframe) {
+        this.updateIframeEvents = function(iframe) {
             basicIframeLoader.updateIframeEvents(iframe);
         };
 
-        this.loadIframe = function (
+        this.loadIframe = function(
             iframe,
             src,
             callback,
@@ -41,10 +41,9 @@ define([
             if (!iframe.baseURI) {
                 if (isIE && iframe.ownerDocument.defaultView.frameElement) {
                     //console.debug(iframe.ownerDocument.defaultView.location);
-                    iframe.baseURI =
-                        iframe.ownerDocument.defaultView.frameElement.getAttribute(
-                            "data-loadUri"
-                        );
+                    iframe.baseURI = iframe.ownerDocument.defaultView.frameElement.getAttribute(
+                        "data-loadUri"
+                    );
 
                     console.log("EPUB doc iframe src (BEFORE):");
                     console.log(src);
@@ -78,52 +77,50 @@ define([
             console.log(loadedDocumentUri);
             iframe.setAttribute("data-loadUri", loadedDocumentUri);
 
-            var shouldConstructDomProgrammatically =
-                getCurrentResourceFetcher().shouldConstructDomProgrammatically();
+            var shouldConstructDomProgrammatically = getCurrentResourceFetcher().shouldConstructDomProgrammatically();
             if (shouldConstructDomProgrammatically) {
                 console.log("shouldConstructDomProgrammatically...");
 
                 getCurrentResourceFetcher().fetchContentDocument(
                     attachedData,
                     loadedDocumentUri,
-                    function (resolvedContentDocumentDom) {
+                    function(resolvedContentDocumentDom) {
                         self._loadIframeWithDocument(
                             iframe,
                             attachedData,
                             resolvedContentDocumentDom.documentElement
                                 .outerHTML,
-                            function () {
+                            function() {
                                 callback.call(caller, true, attachedData);
                             }
                         );
                     },
-                    function (err) {
+                    function(err) {
                         callback.call(caller, false, attachedData);
                     }
                 );
             } else {
-                fetchContentDocument(
-                    loadedDocumentUri,
-                    function (contentDocumentHtml) {
-                        if (!contentDocumentHtml) {
-                            //failed to load content document
-                            callback.call(caller, false, attachedData);
-                        } else {
-                            self._loadIframeWithDocument(
-                                iframe,
-                                attachedData,
-                                contentDocumentHtml,
-                                function () {
-                                    callback.call(caller, true, attachedData);
-                                }
-                            );
-                        }
+                fetchContentDocument(loadedDocumentUri, function(
+                    contentDocumentHtml
+                ) {
+                    if (!contentDocumentHtml) {
+                        //failed to load content document
+                        callback.call(caller, false, attachedData);
+                    } else {
+                        self._loadIframeWithDocument(
+                            iframe,
+                            attachedData,
+                            contentDocumentHtml,
+                            function() {
+                                callback.call(caller, true, attachedData);
+                            }
+                        );
                     }
-                );
+                });
             }
         };
 
-        this._loadIframeWithDocument = function (
+        this._loadIframeWithDocument = function(
             iframe,
             attachedData,
             contentDocumentData,
@@ -156,7 +153,7 @@ define([
                     blob = builder.getBlob(contentType);
                 } else {
                     blob = new Blob([contentDocumentData], {
-                        type: contentType,
+                        type: contentType
                     });
                 }
                 documentDataUri = window.URL.createObjectURL(blob);
@@ -178,7 +175,7 @@ define([
                 // so we're doing it manually. See:
                 // https://github.com/MSOpenTech/winstore-jscompat/
                 if (window.MSApp && window.MSApp.execUnsafeLocalFunction) {
-                    window.MSApp.execUnsafeLocalFunction(function () {
+                    window.MSApp.execUnsafeLocalFunction(function() {
                         iframe.contentWindow.document.write(
                             contentDocumentData
                         );
@@ -188,7 +185,7 @@ define([
                 }
             }
 
-            iframe.onload = function () {
+            iframe.onload = function() {
                 var doc =
                     iframe.contentDocument || iframe.contentWindow.document;
 
@@ -213,10 +210,9 @@ define([
                         var childSrc = undefined;
 
                         try {
-                            childSrc =
-                                child_iframe.frameElement.getAttribute(
-                                    "data-src"
-                                );
+                            childSrc = child_iframe.frameElement.getAttribute(
+                                "data-src"
+                            );
                         } catch (err) {
                             // HTTP(S) cross-origin access?
                             console.warn(err);
@@ -239,10 +235,9 @@ define([
 
                         var publicationFetcher = getCurrentResourceFetcher();
 
-                        var contentDocumentPathRelativeToBase =
-                            publicationFetcher.convertPathRelativeToPackageToRelativeToBase(
-                                contentDocumentPathRelativeToPackage
-                            );
+                        var contentDocumentPathRelativeToBase = publicationFetcher.convertPathRelativeToPackageToRelativeToBase(
+                            contentDocumentPathRelativeToPackage
+                        );
                         // console.log("contentDocumentPathRelativeToBase: " + contentDocumentPathRelativeToBase);
 
                         var refAttrOrigVal_RelativeToBase = new URI(childSrc)
@@ -250,8 +245,7 @@ define([
                             .toString();
                         // console.log("refAttrOrigVal_RelativeToBase: " + refAttrOrigVal_RelativeToBase);
 
-                        var packageFullPath =
-                            publicationFetcher.getPackageFullPathRelativeToBase();
+                        var packageFullPath = publicationFetcher.getPackageFullPathRelativeToBase();
                         // console.log("packageFullPath: " + packageFullPath);
 
                         var refAttrOrigVal_RelativeToPackage = new URI(
@@ -261,10 +255,9 @@ define([
                             .toString();
                         // console.log("refAttrOrigVal_RelativeToPackage: " + refAttrOrigVal_RelativeToPackage);
 
-                        var mimetype =
-                            ContentTypeDiscovery.identifyContentTypeFromFileName(
-                                refAttrOrigVal_RelativeToPackage
-                            );
+                        var mimetype = ContentTypeDiscovery.identifyContentTypeFromFileName(
+                            refAttrOrigVal_RelativeToPackage
+                        );
 
                         var childIframeLoader = new zipIframeLoader(
                             getCurrentResourceFetcher,
@@ -273,21 +266,21 @@ define([
                         childIframeLoader.loadIframe(
                             child_iframe.frameElement,
                             childSrc,
-                            function () {
+                            function() {
                                 console.log("CHILD IFRAME LOADED.");
                             },
                             self,
                             {
                                 spineItem: {
                                     media_type: mimetype, //attachedData.spineItem.media_type,
-                                    href: refAttrOrigVal_RelativeToPackage,
-                                },
+                                    href: refAttrOrigVal_RelativeToPackage
+                                }
                             }
                         );
                     }
                 }
 
-                $("svg", doc).on("load", function () {
+                $("svg", doc).on("load", function() {
                     console.log("SVG loaded");
                 });
 
@@ -327,7 +320,7 @@ define([
                         showMathMenu: false,
                         messageStyle: "none",
                         showProcessingMessages: true,
-                        SVG: { useFontCache: useFontCache },
+                        SVG: { useFontCache: useFontCache }
                     });
 
                     // If MathJax is being used, delay the callback until it has completed rendering
@@ -366,20 +359,20 @@ define([
                 url: path,
                 dataType: "html",
                 async: true,
-                success: function (result) {
+                success: function(result) {
                     callback(result);
                 },
-                error: function (xhr, status, errorThrown) {
+                error: function(xhr, status, errorThrown) {
                     console.error("Error when AJAX fetching " + path);
                     console.error(status);
                     console.error(errorThrown);
                     callback();
-                },
+                }
             });
         }
 
         function fetchContentDocument(src, callback) {
-            fetchHtmlAsText(src, function (contentDocumentHtml) {
+            fetchHtmlAsText(src, function(contentDocumentHtml) {
                 if (!contentDocumentHtml) {
                     callback();
                     return;
